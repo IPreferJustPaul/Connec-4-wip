@@ -8,12 +8,19 @@ void reset_board(int board[8][8]){
 			if(i==3 || i==4 || (i+j)%2==1){
 				d=32;
 			} else if(i<4){
-				d=48;
+				d=176;
 			} else {
-				d=221;
+				d=178;
 			}
 			board[i][j]=d;
 		}
+	}
+}
+void (){
+	printf("Enter your move, L for left or R for Right");
+	scanf("%c", &move);
+	if((move)){
+		
 	}
 }
 void printswitch(int board[8][8], int turn, int i, int j){
@@ -49,16 +56,25 @@ void board_view(int board[8][8], int turn){
 	printf(" -------------------------\n");
 }
 int main(int argc, char *argv[]){
-	int board[8][8], turn=1, move_y, move_x;
+	int board[8][8], turn=1, move_y, move_x, move;
 //	char move_x;
 	reset_board(board);
 	while(1<2){
 		turn++;
 		turn=turn%2;
+		begin:
 		board_view(board, turn);
-		printf("Enter your move:");
+		printf("Select your piece:");
 		scanf("%c %d", &move_x, &move_y);
-		board[move_y-1][toupper(move_x)-65]=84;
-		printf("\n");
+		if(board[move_y-1][toupper(move_x)-65]==32 || toupper(move_x)-65>7 || toupper(move_x)-65<0 || move_y-1>7 || move_y-1<0){
+			system("cls");
+			printf("Try again.\n");
+			goto begin;
+		} else {
+			if(board[move_y-1][toupper(move_x)-65]>200){
+				
+			}
+		}
+		system("cls");
 	}
 }
