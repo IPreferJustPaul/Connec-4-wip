@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h> 
 void reset_board(int board[10][10]){
 	int i, j, d;
 	for(i=0;i<10;i++){
@@ -16,18 +17,31 @@ void reset_board(int board[10][10]){
 		}
 	}
 }
-/*void (){
-	printf("Enter your move, L for left or R for Right");
-	scanf("%c", &move);
-	if((move)){
-		
-	}
-}*/
 void printswitch(int board[10][10], int turn, int i, int j){
+	HANDLE  hConsole;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(turn==0){
-		printf("|%c%c", board[i][j], board[i][j]);
+		if(board[i][j]==93){
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 240);
+			printf("%c%c", board[i][j]-2, board[i][j]);
+			SetConsoleTextAttribute(hConsole, 15);
+		} else if(board[i][j]==91){
+			printf("|%c%c", board[i][j], board[i][j]+2);
+		} else {
+			printf("|%c%c", board[i][j], board[i][j]);
+		}
 	} else {
-		printf("|%c%c", board[9-i][9-j], board[9-i][9-j]);
+		if(board[9-i][9-j]==93){
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 240);
+			printf("%c%c", board[9-i][9-j]-2, board[9-i][9-j]);
+			SetConsoleTextAttribute(hConsole, 15);
+		} else if(board[9-i][9-j]==91){
+			printf("|%c%c", board[9-i][9-j], board[9-i][9-j]+2);
+		} else {
+			printf("|%c%c", board[9-i][9-j], board[9-i][9-j]);
+		}
 	}
 }
 void board_view(int board[10][10], int turn){
@@ -81,12 +95,12 @@ int main(int argc, char *argv[]){
 			printf("Try again.\n");
 			goto begin;
 		} else {
-			if(board[9-x][y]>200){
+			if(board[9-x][y]<128){
 				printf("Enter your move:");
 				scanf("%d", &move2);
 				a=(move2-1)/5;
 				b=((move2-1)%5)*2+a%2;
-				if((move2!=move1+5+x%2 && move2!=move1+4+x%2 && move2!=move1-5+x%2 && move2!=move1-6+x%2)|| move2>50 || move2<1 || a==x|| a>x+1 || a<x-1 || board[9-a][b]==board[9-x][y]){
+				if((move2!=move1+5+x%2 && move2!=move1+4+x%2 && move2!=move1-5+x%2 && move2!=move1-6+x%2)|| move2>50 || move2<1 || a==x|| a>x+1 || a<x-1 || board[9-a][b]==board[9-x][y] || board[9-a][b]==board[9-x][y]+85){
 					system("cls");
 					printf("Try again.\n");
 					goto begin;
@@ -98,7 +112,7 @@ int main(int argc, char *argv[]){
 				scanf("%d", &move2);
 				a=(move2-1)/5;
 				b=((move2-1)%5)*2+a%2;
-				if((move2!=move1+5+x%2 && move2!=move1+4+x%2)|| move2>50 || move2<1 || a==x|| a>x+1 || a<x-1 || board[9-a][b]==board[9-x][y]){
+				if((move2!=move1+5+x%2 && move2!=move1+4+x%2)|| move2>50 || move2<1 || a==x|| a>x+1 || a<x-1 || board[9-a][b]==board[9-x][y] || board[9-a][b]==board[9-x][y]-85){
 					system("cls");
 					printf("Try again.\n");
 					goto begin;
@@ -110,10 +124,12 @@ int main(int argc, char *argv[]){
 				scanf("%d", &move2);
 				a=(move2-1)/5;
 				b=((move2-1)%5)*2+a%2;
-				if((move2!=move1-5+x%2 && move2!=move1-6+x%2)|| move2>50 || move2<1 || a==x|| a>x+1 || a<x-1 || board[9-a][b]==board[9-x][y]){
+				if((move2!=move1-5+x%2 && move2!=move1-6+x%2)|| move2>50 || move2<1 || a==x|| a>x+1 || a<x-1 || board[9-a][b]==board[9-x][y] || board[9-a][b]==board[9-x][y]-85){
 					system("cls");
 					printf("Try again.\n");
 					goto begin;
+				}
+				if(board[9-a][b]==176+turn*2 || board[9-a][b]==91+turn*2){
 				}
 				board[9-a][b]=board[9-x][y];
 				board[9-x][y]=32;				
@@ -123,3 +139,4 @@ int main(int argc, char *argv[]){
 	}
 	board_view(board, turn);
 }
+
