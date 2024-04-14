@@ -8,14 +8,31 @@ void reset_board(int board[10][10]){
 		for(j=0;j<10;j++){
 			if(i==5 || i==4 || (i+j)%2==0){
 				d=32;
-			} else if(i<5){
-				d=176;
-			} else {
+			} else if(i>5){
 				d=178;
+			} else {
+				d=176;
 			}
 			board[i][j]=d;
 		}
 	}
+}
+int board_check(int board[10][10], int turn){
+	int i, j, d=0;
+	for(i=0;i<10;i++){
+		for(j=0;j<10;j++){
+			if(i==0 && board[i][j]==178){
+				board[i][j]=93;
+			}
+			if(i==9 && board[i][j]==176){
+				board[i][j]=91;
+			}
+			if(board[i][j]==176+turn*2 || board[i][j]==91+turn*2){
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 void printswitch(int board[10][10], int turn, int i, int j){
 	HANDLE  hConsole;
@@ -79,7 +96,8 @@ void board_view(int board[10][10], int turn){
 	printf("\t  -------------------------------\n");
 }
 int main(int argc, char *argv[]){
-	int board[10][10], turn=1, move1, x, y, move2, a, b;
+	int board[10][10], turn=1, move1, x, y, move2, a, b, move3, c, d;
+	gamestart:
 	reset_board(board);
 	while(1<2){
 		turn++;
@@ -105,8 +123,22 @@ int main(int argc, char *argv[]){
 					printf("Try again.\n");
 					goto begin;
 				}
-				board[9-a][b]=board[9-x][y];
-				board[9-x][y]=32;
+				if(board[9-a][b]==176+turn*2 || board[9-a][b]==91+turn*2){
+					c=a*2-x;
+					d=b*2-y;
+					move3=1+c*5+(d-c%2)/2;
+					if(move3>50 || move3<1 || c==a|| c>x+2 || c<x-2 || board[9-c][d]!=32){
+						system("cls");
+						printf("Try again.\n");
+						goto begin;
+					}
+					board[9-c][d]=board[9-x][y];
+					board[9-a][b]=32;
+					board[9-x][y]=32;
+				} else {
+					board[9-a][b]=board[9-x][y];
+					board[9-x][y]=32;
+				}
 			} else if(turn==0){
 				printf("Enter your move:");
 				scanf("%d", &move2);
@@ -117,8 +149,22 @@ int main(int argc, char *argv[]){
 					printf("Try again.\n");
 					goto begin;
 				}
-				board[9-a][b]=board[9-x][y];
-				board[9-x][y]=32;
+				if(board[9-a][b]==176+turn*2 || board[9-a][b]==91+turn*2){
+					c=a*2-x;
+					d=b*2-y;
+					move3=1+c*5+(d-c%2)/2;
+					if(move3>50 || move3<1 || c==a|| c>x+2 || c<x-2 || board[9-c][d]!=32){
+						system("cls");
+						printf("Try again.\n");
+						goto begin;
+					}
+					board[9-c][d]=board[9-x][y];
+					board[9-a][b]=32;
+					board[9-x][y]=32;
+				} else {
+					board[9-a][b]=board[9-x][y];
+					board[9-x][y]=32;
+				}
 			} else {
 				printf("Enter your move:");
 				scanf("%d", &move2);
@@ -130,13 +176,29 @@ int main(int argc, char *argv[]){
 					goto begin;
 				}
 				if(board[9-a][b]==176+turn*2 || board[9-a][b]==91+turn*2){
-				}
-				board[9-a][b]=board[9-x][y];
-				board[9-x][y]=32;				
+					c=a*2-x;
+					d=b*2-y;
+					move3=1+c*5+(d-c%2)/2;
+					if(move3>50 || move3<1 || c==a|| c>x+2 || c<x-2 || board[9-c][d]!=32){
+						system("cls");
+						printf("Try again.\n");
+						goto begin;
+					}
+					board[9-c][d]=board[9-x][y];
+					board[9-a][b]=32;
+					board[9-x][y]=32;
+				} else {
+					board[9-a][b]=board[9-x][y];
+					board[9-x][y]=32;
+				}				
 			}
 		}
 		system("cls");
+		if(board_check(board, turn)==0){
+			printf("Congrats player %d.\n", turn+1);
+			turn=1;
+			break;
+		}
 	}
-	board_view(board, turn);
+	goto gamestart;
 }
-
