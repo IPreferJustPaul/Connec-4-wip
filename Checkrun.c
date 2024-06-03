@@ -97,6 +97,10 @@ void board_view(int board[10][10], int turn){
 }
 int queen_move(int board[10][10], int move1, int x, int y, int turn){
 	int move2, a, b, move3, c, d;
+	if(board[9-x][y]==91+turn*2){
+		printf("Try again.\n");
+		return 1;
+	}
 	printf("Enter your move:");
 	scanf("%d", &move2);
 	a=(move2-1)/5;
