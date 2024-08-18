@@ -9,9 +9,9 @@ void reset_board(int board[10][10]){
 			if(i==5 || i==4 || (i+j)%2==0){
 				d=32;
 			} else if(i>5){
-				d=93;
+				d=178;
 			} else {
-				d=91;
+				d=176;
 			}
 			board[i][j]=d;
 		}
@@ -40,25 +40,68 @@ void printswitch(int board[10][10], int turn, int i, int j){
 	if(turn==0){
 		if(board[i][j]==93){
 			printf("|");
-			SetConsoleTextAttribute(hConsole, 240);
+			SetConsoleTextAttribute(hConsole, 196);
 			printf("%c%c", board[i][j]-2, board[i][j]);
 			SetConsoleTextAttribute(hConsole, 15);
 		} else if(board[i][j]==91){
-			printf("|%c%c", board[i][j], board[i][j]+2);
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 145);
+			printf("%c%c", board[i][j], board[i][j]+2);
+			SetConsoleTextAttribute(hConsole, 15);
+		} else if(board[i][j]==178){
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 196);
+			printf("%c%c", board[i][j]-2, board[i][j]);
+			SetConsoleTextAttribute(hConsole, 15);
+		} else if(board[i][j]==176){
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 145);
+			printf("%c%c", board[i][j], board[i][j]+2);
+			SetConsoleTextAttribute(hConsole, 15);
 		} else {
-			printf("|%c%c", board[i][j], board[i][j]);
+			if (board[i][j]==32 && (i+j)%2==1){
+				printf("|");
+				SetConsoleTextAttribute(hConsole, 8);
+				printf("%c%c", 219, 219);
+				SetConsoleTextAttribute(hConsole, 15);
+			} else {
+				printf("|%c%c", board[i][j], board[i][j]);
+			}
 		}
+		SetConsoleTextAttribute(hConsole, 15);
 	} else {
 		if(board[9-i][9-j]==93){
 			printf("|");
-			SetConsoleTextAttribute(hConsole, 240);
+			SetConsoleTextAttribute(hConsole, 196);
 			printf("%c%c", board[9-i][9-j]-2, board[9-i][9-j]);
 			SetConsoleTextAttribute(hConsole, 15);
 		} else if(board[9-i][9-j]==91){
-			printf("|%c%c", board[9-i][9-j], board[9-i][9-j]+2);
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 145);
+			printf("%c%c", board[9-i][9-j], board[9-i][9-j]+2);
+			SetConsoleTextAttribute(hConsole, 15);
+		} else if(board[9-i][9-j]==178){
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 196);
+			printf("%c%c", board[9-i][9-j]-2, board[9-i][9-j]);
+			SetConsoleTextAttribute(hConsole, 15);
+		} else if(board[9-i][9-j]==176){
+			printf("|");
+			SetConsoleTextAttribute(hConsole, 145);
+			printf("%c%c", board[9-i][9-j], board[9-i][9-j]+2);
+			SetConsoleTextAttribute(hConsole, 15);
 		} else {
-			printf("|%c%c", board[9-i][9-j], board[9-i][9-j]);
+			if (board[9-i][9-j]==32 && (i+j)%2==1){
+				printf("|");
+				SetConsoleTextAttribute(hConsole, 8);
+				printf("%c%c", 219, 219);
+				SetConsoleTextAttribute(hConsole, 15);
+			} else {
+				printf("|%c%c", board[9-i][9-j], board[9-i][9-j]);
+			}
 		}
+		
+		SetConsoleTextAttribute(hConsole, 15);
 	}
 }
 void board_view(int board[10][10], int turn){
@@ -97,10 +140,6 @@ void board_view(int board[10][10], int turn){
 }
 int queen_move(int board[10][10], int move1, int x, int y, int turn){
 	int move2, a, b, move3, c, d;
-	if(board[9-x][y]==91+turn*2){
-		printf("Try again.\n");
-		return 1;
-	}
 	printf("Enter your move:");
 	scanf("%d", &move2);
 	a=(move2-1)/5;
@@ -221,7 +260,11 @@ int move(int board[10][10], int turn){
 				return turn;
 			}
 		} else {
-							
+			fail=black_move(board, move1, x, y, turn);
+			if(fail==1){
+				turn=(turn+1)%2;
+				return turn;
+			}				
 		}
 	}
 	return turn;
@@ -234,7 +277,13 @@ int main(int argc, char *argv[]){
 		while(1<2){
 			turn=move(board, turn);
 			system("cls");
-			if(board_check(board, turn)==0 || turn==420){
+			if (turn == 69) {
+				printf("What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little *clever* comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, kiddo.\n");
+				turn = 1;
+				break;
+				system("cls");
+			}
+			else if(board_check(board, turn)==0){
 				printf("%d", turn);
 				printf("Congrats player %d.\n", turn+1);
 				turn=1;
